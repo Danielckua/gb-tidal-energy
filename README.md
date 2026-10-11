@@ -1,6 +1,6 @@
 # Tidal stream generation in Great Britain
 
-Research materials supporting **“An integrated framework for evaluating tidal stream generation potential and its power system benefits: evidence from Great Britain”**.
+Materials supporting the research paper **“An integrated framework for evaluating tidal stream generation potential and its power system benefits: evidence from Great Britain”**.
 
 **Authors:** Daniil Hulak, Marko Aunedi, Sobhan Naderian and Gareth Taylor.
 
@@ -20,25 +20,23 @@ The maps present the spatial assessment of tidal currents, water depth, distance
 
 **Online map:** Link to be added after deployment.
 
-The published maps will be accessible in a web browser without installing QGIS.
+The published maps are accessible in a web browser without installing QGIS.
 
 ## Stage 2: Power-system modelling
 
-Five scenarios are planned for inclusion:
+Five scenarios are represented:
 
 * Scenario 0: baseline.
-* Three scenarios representing zonal tidal stream deployment.
+* Three scenarios representing zonal tidal stream deployment in different zones.
 * A full tidal deployment scenario.
-
-Exact scenario identifiers, input requirements and execution instructions will be added with the scripts.
 
 ## Reproduction and solvers
 
-The original simulations used IBM ILOG CPLEX. Reference outputs will be stored in `initial_results/`.
+The original simulations used IBM ILOG CPLEX. Reference outputs are stored in `initial_results/`.
 
-HiGHS is the intended open-source alternative for reproduction. Compatibility and results will be checked before HiGHS instructions are marked as tested. CPLEX requires a suitable installation and licence.
+HiGHS is the intended open-source alternative for reproduction. CPLEX requires a suitable installation and licence.
 
-Python, PyPSA, solver versions and dependencies will be documented with the code. New simulation runs will write to a separate output folder to preserve the original reference results.
+Python, PyPSA, solver versions and dependencies are documented with the code. New simulation runs will write to a separate output folder to preserve the original reference results.
 
 ## Associated paper
 
@@ -47,11 +45,3 @@ Python, PyPSA, solver versions and dependencies will be documented with the code
 **Authors:** Daniil Hulak, Marko Aunedi, Sobhan Naderian and Gareth Taylor
 
 **Journal, publication year and DOI:** To be added following publication.
-
-## Data sources and reuse
-
-Dataset references, acknowledgements and applicable reuse terms will be documented alongside the uploaded materials. Third-party datasets retain their original licence terms.
-
-## Current status
-
-Repository under preparation. Maps, scenario scripts, reference results and reproduction instructions are being added.
