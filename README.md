@@ -18,7 +18,7 @@ The interactive map is included. The Stage 2 code, inputs and reference results 
 
 ## Interactive Research Map
 
-**[Great Britain Tidal Energy — Interactive Research Map](https://danielckua.github.io/gb-tidal-energy/)**
+**[Great Britain Tidal Energy — Interactive Research Map](https://danielckua.github.io/gb-tidal-energy/?v=20261012-default-layers)**
 
 This interactive map presents geographical screening and multi-objective optimisation results for tidal energy site selection around Great Britain. Users can compare water-depth scenarios of **30–50 m** and **35–45 m**, explore tidal-speed and distance-to-shore criteria, and examine Pareto-optimal locations alongside geographical reference layers and GB power-system boundaries.
 
