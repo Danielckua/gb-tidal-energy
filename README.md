@@ -8,13 +8,13 @@ The study combines geospatial resource assessment and multi-objective site optim
 
 ## Repository contents
 
-The interactive map, five Stage 2 PyPSA notebooks and their shared hourly input dataset are published. The original CPLEX reference outputs will be added separately.
+The interactive map, five Stage 2 PyPSA notebooks and their shared hourly input dataset, and the original CPLEX reference results archive are published.
 
 | Folder             | Contents                                                                               |
 | ------------------ | -------------------------------------------------------------------------------------- |
 | `stage1_maps/`     | Interactive maps presenting the spatial assessment and tidal stream deployment results |
 | `stage2_pypsa/`    | Five runnable Jupyter notebooks, `Inputs_2030.csv`, setup instructions and dependencies  |
-| `initial_results/` | Reference simulation outputs produced using CPLEX                                      |
+| `initial_results/` | Original CPLEX reference results archive: five scenarios, 20 hourly CSV files          |
 
 ## Interactive Research Map
 
@@ -62,11 +62,11 @@ See the [Stage 2 README](stage2_pypsa/README.md) for setup, model assumptions, s
 
 ## Reproduction and solvers
 
-The original simulations used IBM ILOG CPLEX. Reference outputs are planned for `initial_results/` and are not yet included in this repository.
+The original simulations used IBM ILOG CPLEX. The original CPLEX results are published as a **single archive**: [Download CPLEX reference results ZIP](initial_results/GB_tidal_CPLEX_reference_results.zip) (13.8 MB). After extraction, the archive contains five scenario directories and four hourly CSV outputs per scenario. See [results documentation and checksum](initial_results/README.md).
 
 HiGHS is the default open-source solver in the published notebooks. CPLEX can be selected if its compatible Python interface and suitable licence are installed. The notebooks include an **optional**, commented pip installation cell for users who do not already have a working PyPSA environment.
 
-New simulation results are written into separate `stage2_pypsa/outputs/<scenario>/` folders (ignored by Git) and will not overwrite future reference CPLEX outputs. The code has been structurally checked, but a full 8,760-hour run in a clean modern PyPSA environment has not been independently validated; exact original software and solver versions should be documented alongside the reference results.
+New simulation results are written into separate `stage2_pypsa/outputs/<scenario>/` folders (ignored by Git) and will not overwrite the archived reference CPLEX outputs. The code has been structurally checked, but a full 8,760-hour run in a clean modern PyPSA environment has not been independently validated; exact original software and solver versions should be documented alongside the reference results.
 
 ## Associated paper
 
