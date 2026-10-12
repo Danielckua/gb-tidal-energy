@@ -36,7 +36,7 @@ Each notebook sets `SOLVER = "highs"`. To use the paper's solver, set `SOLVER = 
 
 ## Capacity substitutions
 
-These are the **actual notebook changes relative to Scenario 0**, in MW. They retain the supplied model configuration; Table 4 of the manuscript has different wind-type labels in zones 1 and 12.
+Capacity changes relative to Scenario 0, in MW, as implemented in the supplied notebooks.
 
 | Notebook | Added tidal | Removed wind / PV | Total tidal capacity |
 | --- | --- | --- | ---: |
@@ -63,7 +63,7 @@ The baseline tidal portfolio is **287 MW in z1, 100 MW in z9 and 210 MW in z10**
 | Load shedding | Backup generator in each zone at £3,000/MWh |
 | Decisions | Continuous dispatch and storage scheduling with fixed asset capacities; no capacity expansion or unit commitment |
 
-The link network is a zonal transport representation. It does not implement AC power flow or line impedances. See [the system map and topology](../docs/figures/README.md) and [paper/code consistency notes](../docs/reproducibility.md).
+The link network is a zonal transport representation. It does not implement AC power flow or line impedances. See [the system map and topology](../docs/figures/README.md) and [data sources](../docs/reproducibility.md).
 
 ## Outputs
 
@@ -81,8 +81,8 @@ New runs write to `outputs/<scenario>/`, ignored by Git:
 
 Snapshots are integer labels **0–8759**, not timestamped observations from calendar year 2030. Preserve the supplied row order.
 
-The original CPLEX results are in a [separate ZIP](../initial_results/). For comparisons without a solver, use [summarise_results.py](summarise_results.py) and its [instructions](../initial_results/README.md#summarise-without-a-solver).
+The original CPLEX results are in a [separate ZIP](../initial_results/). Refer to the associated paper for the analysis and interpretation of these outputs.
 
-## Validation
+## Software check
 
-All five models were constructed with PyPSA 1.0.4. A **48-hour baseline** solved optimally with HiGHS and the curtailment export succeeded. A full-year rerun has not been performed in this audit. Eight inactive baseline generator definitions with missing input columns remain commented out; they have zero installed capacity. [Versions and remaining reproduction gaps](../docs/reproducibility.md#validation-and-software).
+The five models build with PyPSA 1.0.4, and a 48-hour baseline test solved with HiGHS. The reference archive contains the original full-year CPLEX outputs; no new full-year rerun is included in this package update.

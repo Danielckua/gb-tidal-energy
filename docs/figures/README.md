@@ -1,30 +1,26 @@
-# Selected figures from the submitted paper
+# Research figures
 
-These four PNGs were extracted unchanged from the user-supplied **Tidal project paper_final_draft - no highlights.docx**. They retain the submitted figure content; they are not plots regenerated from the repository's outputs. Authors: Daniil Hulak, Marko Aunedi, Sobhan Naderian and Gareth Taylor. Manuscript submitted to *Energy*; publication DOI not yet supplied.
+Selected figures from **“An integrated framework for evaluating tidal stream generation potential and its power system benefits: evidence from Great Britain”**, by Daniil Hulak, Marko Aunedi, Sobhan Naderian and Gareth Taylor, submitted to *Energy*.
 
-The original figures may contain manuscript labels or values requiring reconciliation. Read the [consistency notes](../reproducibility.md#consistency-with-the-submitted-paper) before interpreting Figures 11–12 as a verified reproduction.
+## Figure 5 — GB system representation
 
-## Figure 5, left panel — ETYS-aligned GB zonal system map
+<p>
+  <img src="gb-system-map.png" alt="GB zonal system map and ETYS boundaries" width="353" height="520">
+  <img src="gb-system-topology-vertical.svg" alt="Vertical 17-zone GB network topology" width="134" height="520">
+</p>
 
-![Figure 5, left panel — ETYS-aligned GB zonal system map](gb-system-map.png)
+The left panel shows the 17 ETYS-aligned electricity zones; the right panel shows the simplified connections used in the PyPSA model. Both panels are from Figure 5. The original topology image is displayed with a 90° rotation to restore its vertical orientation and upright labels.
 
-Source: DOCX `word/media/image10.png`. SHA-256: `d6eca8687e1758b3b3e60b2bc34ffdc59002ca1788a41de3c71caba35bb99c7f`.
+## Figure 11 — scenario impacts
 
-## Figure 5, right panel — simplified 17-zone network topology
+![Changes in generation, RES curtailment and operating costs](scenario-impacts.png)
 
-![Figure 5, right panel — simplified 17-zone network topology](gb-system-topology.png)
+The figure compares tidal deployment scenarios with the baseline. Bars show changes in annual generation by technology group; the solid red line shows the change in RES curtailment. The dashed blue line uses the secondary axis to show the change in total system operating cost. Negative cost changes indicate savings relative to the baseline.
 
-Source: DOCX `word/media/image11.png`. SHA-256: `89f645fe53334efd2b5bf31d8ee464b87010c2d443803886926cfc277511fffc`.
+## Figure 12 — zonal market metrics
 
-## Figure 11 — generation, curtailment and operating-cost changes
+![Zonal changes in generation costs, RES capture prices and weighted market prices](zonal-market-metrics.png)
 
-![Figure 11 — generation, curtailment and operating-cost changes](scenario-impacts.png)
+The three heatmaps show changes relative to the baseline in **average generation cost** (top), **market capture price for the RES mix** (middle), and **demand-weighted average market price** (bottom), all in £/MWh. Rows represent tidal deployment scenarios; columns represent the 17 zones and the whole system. Capture price is the electricity price weighted by renewable generation; the weighted market price uses electricity demand as its weight. Negative values mean a lower value than in the baseline; a lower capture price also means lower revenue per MWh for generators.
 
-Source: DOCX `word/media/image22.png`. SHA-256: `11bd210c8f6e12f071f9e662e0d81c410a72ce2915ada61a408a22f1e083c150`.
-
-## Figure 12 — zonal generation costs, capture prices and weighted prices
-
-![Figure 12 — zonal generation costs, capture prices and weighted prices](zonal-market-metrics.png)
-
-Source: DOCX `word/media/image23.png`. SHA-256: `8bfb86a1abe329491d689e389c2269c63fd9284da047bd3b6d7f32cc603bd002`.
-
+These are the paper's figures, not newly calculated results. See the paper for their full definitions and discussion.
