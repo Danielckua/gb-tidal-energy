@@ -1,0 +1,54 @@
+name: Assemble CPLEX reference archive
+
+on:
+  push:
+    branches:
+      - publish-cplex-zip
+    paths:
+      - ".github/workflows/assemble-cplex.yml"
+      - "initial_results/.upload_parts/**"
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the staging branch
+        uses: actions/checkout@v4
+      - name: Assemble, hash-check and inspect the archive
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import hashlib
+          directory = Path("initial_results/.upload_parts")
+          parts = sorted(directory.glob("part_*.bin"))
+          assert len(parts) == 27, f"Expected 27 chunks, found {len(parts)}"
+          target = Path("initial_results/GB_tidal_CPLEX_reference_results.zip")
+          with target.open("wb") as output:
+              for part in parts:
+                  output.write(part.read_bytes())
+          digest = hashlib.sha256(target.read_bytes()).hexdigest()
+          expected = "890f7d7547ec84f3ed12f34a769463076a21f9ece62f9fafdd54e5de9cf9ef4a"
+          assert digest == expected, f"Archive hash mismatch: {digest}"
+          with ZipFile(target) as archive:
+              members = archive.namelist()
+              assert len(members) == 20, f"Expected 20 CSV files, found {len(members)}"
+              assert archive.testzip() is None, "Corrupted archive member"
+              for scenario in ("scenario_0", "scenario_1_z1", "scenario_2_z9", "scenario_3_z15", "scenario_4_all"):
+                  paths = [p for p in members if p.startswith(scenario + "/")]
+                  assert len(paths) == 4, f"Expected four result files in {scenario}"
+          print(f"Verified {len(members)} CSV files; SHA-256 {digest}")
+          PY
+      - name: Commit just the verified archive
+        shell: bash
+        run: |
+          git rm -r initial_results/.upload_parts
+          git add initial_results/GB_tidal_CPLEX_reference_results.zip
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Publish verified CPLEX reference results archive"
+          git push origin HEAD:publish-cplex-zip
