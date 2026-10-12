@@ -1,77 +1,60 @@
 # Tidal stream generation in Great Britain
 
-Materials supporting the research paper **“An integrated framework for evaluating tidal stream generation potential and its power system benefits: evidence from Great Britain”**.
+Research materials for **“An integrated framework for evaluating tidal stream generation potential and its power system benefits: evidence from Great Britain”**, submitted to *Energy*.
 
-**Authors:** Daniil Hulak, Marko Aunedi, Sobhan Naderian and Gareth Taylor.
+**Daniil Hulak, Marko Aunedi, Sobhan Naderian and Gareth Taylor** · Brunel Interdisciplinary Power Systems Research Centre
 
-The study combines geospatial resource assessment and multi-objective site optimisation with a 17-zone PyPSA model of the 2030 Great Britain electricity system to evaluate tidal stream generation potential and its operational and economic benefits.
+The study connects geospatial screening and NSGA-II site selection with hourly operation of a **17-zone, 2030 GB electricity system**. Tidal deployment is compared with a baseline by substituting wind and solar PV capacity.
 
-## Repository contents
+## Start here
 
-The interactive map, five Stage 2 PyPSA notebooks and their shared hourly input dataset, and the original CPLEX reference results archive are published.
+| To… | Open… |
+| --- | --- |
+| Explore tidal sites and ETYS boundaries | [Interactive research map](https://danielckua.github.io/gb-tidal-energy/?v=20261012-default-layers) |
+| Run a power-system scenario | [Five PyPSA notebooks and setup guide](stage2_pypsa/) |
+| Inspect the original hourly results | [Download CPLEX results ZIP](initial_results/GB_tidal_CPLEX_reference_results.zip) · [Guide](initial_results/) |
+| Compare the five scenarios without a solver | [Verified summary](initial_results/scenario_summary.csv) · [Summary command](initial_results/README.md#summarise-without-a-solver) |
+| Understand the sources and paper/code differences | [Reproducibility notes](docs/reproducibility.md) |
 
-| Folder             | Contents                                                                               |
-| ------------------ | -------------------------------------------------------------------------------------- |
-| `stage1_maps/`     | Interactive maps presenting the spatial assessment and tidal stream deployment results |
-| `stage2_pypsa/`    | Five runnable Jupyter notebooks, `Inputs_2030.csv`, setup instructions and dependencies  |
-| `initial_results/` | Original CPLEX reference results archive: five scenarios, 20 hourly CSV files          |
+## Research workflow
 
-## Interactive Research Map
-
-**[Great Britain Tidal Energy — Interactive Research Map](https://danielckua.github.io/gb-tidal-energy/?v=20261012-default-layers)**
-
-This interactive map presents geographical screening and multi-objective optimisation results for tidal energy site selection around Great Britain. Users can compare water-depth scenarios of **30–50 m** and **35–45 m**, explore tidal-speed and distance-to-shore criteria, and examine Pareto-optimal locations alongside geographical reference layers and GB power-system boundaries.
-
-### Exploring the map
-
-Open **Layers** to enable or disable geographical references, optimisation results and suitability/screening layers. The legend displays the criteria associated with each coloured layer. Zoom and pan to explore the region, and click features to view their attributes. Disable **United Kingdom – Land** when you want to reveal basemap labels beneath its opaque fill. The land reference includes Northern Ireland.
-
-The map runs in a web browser without installing QGIS. Internet access is required for the OpenStreetMap background. The research overlays are bundled with the site.
-
-### Data sources and attribution
-
-The research layers are the author's supplied QGIS export of the spatial assessment and optimisation results associated with the paper above. The power-system reference uses the ETYS boundaries included in that export. Detailed source datasets, versions, processing methods and applicable redistribution terms should be documented in the accompanying paper and research package; this export does not establish a new licence for third-party research data.
-
-The geographical basemap is **© [OpenStreetMap contributors](https://www.openstreetmap.org/copyright)**. Preserve the visible attribution and follow the [OpenStreetMap tile usage policy](https://operations.osmfoundation.org/policies/tiles/). The tile service is best-effort and no API key is needed.
-
-### Running locally
-
-With Python installed, run this command from the repository root:
-
-```sh
-python -m http.server 8001 --bind 127.0.0.1 --directory stage1_maps
+```mermaid
+flowchart TD
+    A["GEBCO bathymetry and TPXO tidal currents"] --> B["Spatial screening and NSGA-II site selection"]
+    B --> C["Published map layers"]
+    B --> D["Deployment in zones 1, 9 and 15"]
+    E["ETYS and FES assumptions plus hourly profiles"] --> F["17-zone PyPSA model"]
+    D --> F
+    F --> G["Baseline and four tidal scenarios"]
+    G --> H["Generation, curtailment, costs and prices"]
 ```
 
-Then open <http://localhost:8001/>. Use an available port if 8001 is occupied. Serve the map over HTTP rather than opening `index.html` directly from the filesystem.
+This diagram describes the study. The repository supplies the Stage 1 **map export**, Stage 2 **model notebooks and processed inputs**, and **reference outputs**. Raw spatial datasets and scripts for regenerating the Stage 1 screening and optimisation are not included.
 
-### Deployment
+## The GB system
 
-`.github/workflows/deploy-pages.yml` deploys only `stage1_maps/` as the website root on pushes to `main` or manual workflow dispatch. PyPSA scripts and simulation outputs are excluded from the website artifact. GitHub Pages must use **GitHub Actions** as its publishing source.
+<img src="docs/figures/gb-system-map.png" alt="Figure 5 left: 17 GB electricity zones and ETYS boundaries" width="420">
 
-## Stage 2: Power-system modelling
+![Figure 5 right: simplified 17-zone network topology](docs/figures/gb-system-topology.png)
 
-**[Open the Stage 2 PyPSA notebooks](stage2_pypsa/)**. The five 8,760-hour simulations are provided as separate Jupyter notebooks:
+Figure 5 panels from the submitted manuscript. [Selected paper figures and captions](docs/figures/README.md) also include the scenario and market results.
 
-* Scenario 0: baseline with no **additional** tidal deployment (597 MW of existing tidal capacity).
-* Scenario 1: additional 500 MW in zone 1.
-* Scenario 2: additional 500 MW in zone 9.
-* Scenario 3: additional 500 MW in zone 15.
-* Scenario 4: additional 500 MW in each of zones 1, 9 and 15.
+## Deployment scenarios
 
-See the [Stage 2 README](stage2_pypsa/README.md) for setup, model assumptions, solver choice, run instructions and limitations.
+| Scenario | Additional tidal stream capacity | Notebook |
+| --- | --- | --- |
+| Baseline | 0 MW | [Scenario 0](stage2_pypsa/scenario_0.ipynb) |
+| Tidal zone 1 | 500 MW in zone 1 | [Scenario 1](stage2_pypsa/scenario_1_z1.ipynb) |
+| Tidal zone 9 | 500 MW in zone 9 | [Scenario 2](stage2_pypsa/scenario_2_z9.ipynb) |
+| Tidal zone 15 | 500 MW in zone 15; some wind substitution in zone 12 | [Scenario 3](stage2_pypsa/scenario_3_z15.ipynb) |
+| Tidal zones 1, 9, 15 | 500 MW in each zone; 1,500 MW in total | [Scenario 4](stage2_pypsa/scenario_4_all.ipynb) |
 
-## Reproduction and solvers
+The model baseline contains **597 MW of tidal capacity** from the 2030 portfolio. These scenarios add capacity to that baseline; it is not a zero-tidal case. The exact wind/PV substitutions are listed in the [model guide](stage2_pypsa/README.md#capacity-substitutions).
 
-The original simulations used IBM ILOG CPLEX. The original CPLEX results are published as a **single archive**: [Download CPLEX reference results ZIP](initial_results/GB_tidal_CPLEX_reference_results.zip) (13.8 MB). After extraction, the archive contains five scenario directories and four hourly CSV outputs per scenario. See [results documentation and checksum](initial_results/README.md).
+The archived results yield **£64.97 million/year lower operating cost** and **0.578 TWh/year more dispatched wind, PV and tidal energy** in the combined scenario. Some manuscript labels and curtailment figures need reconciliation with the supplied files; see the [consistency check](docs/reproducibility.md#consistency-with-the-submitted-paper).
 
-HiGHS is the default open-source solver in the published notebooks. CPLEX can be selected if its compatible Python interface and suitable licence are installed. The notebooks include an **optional**, commented pip installation cell for users who do not already have a working PyPSA environment.
+## Reuse and citation
 
-New simulation results are written into separate `stage2_pypsa/outputs/<scenario>/` folders (ignored by Git) and will not overwrite the archived reference CPLEX outputs. The code has been structurally checked, but a full 8,760-hour run in a clean modern PyPSA environment has not been independently validated; exact original software and solver versions should be documented alongside the reference results.
+The paper results were solved with **IBM ILOG CPLEX**. The notebooks offer **HiGHS** for open-source reruns. A solver change or a different dependency environment may change the dispatch and prices; the original outputs remain in a single ZIP, separate from new runs.
 
-## Associated paper
-
-**Title:** An integrated framework for evaluating tidal stream generation potential and its power system benefits: evidence from Great Britain
-
-**Authors:** Daniil Hulak, Marko Aunedi, Sobhan Naderian and Gareth Taylor
-
-**Journal, publication year and DOI:** To be added following publication.
+The paper is submitted to *Energy*; a publication DOI is not yet provided. GitHub's **Cite this repository** button uses [CITATION.cff](CITATION.cff). See [sources, attribution and validation](docs/reproducibility.md) before reusing the materials. The map retains **© OpenStreetMap contributors** attribution.

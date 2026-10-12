@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Please cite the associated paper when published; until then, cite these research materials and the commit used."
+type: dataset
+title: "Research materials for tidal stream generation potential and power system benefits in Great Britain"
+authors:
+  - family-names: Hulak
+    given-names: Daniil
+  - family-names: Aunedi
+    given-names: Marko
+  - family-names: Naderian
+    given-names: Sobhan
+  - family-names: Taylor
+    given-names: Gareth
+url: "https://github.com/Danielckua/gb-tidal-energy"
+repository-code: "https://github.com/Danielckua/gb-tidal-energy"
+abstract: "Interactive spatial results, five 2030 GB PyPSA scenarios, processed hourly inputs, and original CPLEX reference outputs supporting a manuscript submitted to Energy."
+keywords:
+  - tidal stream
+  - Great Britain
+  - PyPSA
+  - power system modelling
+  - geospatial analysis

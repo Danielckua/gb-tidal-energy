@@ -1,64 +1,88 @@
-# Stage 2 — 2030 GB power-system scenarios (PyPSA)
+# Stage 2 — 2030 GB power-system scenarios
 
-Five independent Jupyter notebooks reproduce the 17-zone dispatch-model configurations used in the study. Their component definitions, network topology, time-series inputs, and original data/assumptions have been retained. A standalone notebook and the shared `Inputs_2030.csv` are sufficient to build each scenario.
+Five independent notebooks build the published 17-zone model and optimise **8,760 one-hour snapshots**. Each uses the same processed `Inputs_2030.csv`; no data API or API key is needed.
 
-## Scenarios
+## Run a scenario
 
-| Notebook | Added tidal capacity | Total tidal capacity |
-| --- | --- | ---: |
-| `scenario_0.ipynb` | No **additional** tidal capacity | 597 MW |
-| `scenario_1_z1.ipynb` | 500 MW in zone 1 | 1,097 MW |
-| `scenario_2_z9.ipynb` | 500 MW in zone 9 | 1,097 MW |
-| `scenario_3_z15.ipynb` | 500 MW in zone 15 | 1,097 MW |
-| `scenario_4_all.ipynb` | 500 MW each in zones 1, 9 and 15 | 2,097 MW |
+Use **Python 3.11 or later**; Python 3.12 was used for the repository checks. From the repository root:
 
-The baseline includes 287 MW in zone 1, 100 MW in zone 9 and 210 MW in zone 10, totaling **597 MW of existing tidal capacity**. “No tidal” refers to no additional deployment, **not** zero tidal production. The original notebook filename containing `z12_15` actually deploys added capacity in **zone 15 only**.
-
-## Setup
-
-- **For a new environment, Python 3.12 is recommended.** Current PyPSA (1.x) supports Python 3.11+; the original notebooks retain their historical Python 3.10.19 kernel metadata, which does **not** indicate validation against PyPSA 1.x. Select an available compatible Python kernel in Jupyter if your local environment name differs.
-- If PyPSA and the supporting packages are already installed in a working environment, **skip the optional installation cell** in each notebook. Do not upgrade a working environment solely to follow this guide.
-- For a **new** environment, run the commented command in the optional first code cell once, or install from `requirements.txt`:
-
-  ```bash
-  python -m pip install -r requirements.txt
-  jupyter lab
-  ```
-
-- The simplified, unpinned requirements install current compatible package releases. PyPSA installs **HiGHS** as its default open-source solver. Users choosing **CPLEX** must install the IBM CPLEX Python interface separately and have an appropriate licence for a full-year model. Python 3.12-compatible CPLEX distributions are available, but compatibility of this particular research model with a new PyPSA/CPLEX stack has **not** been fully validated.
-- Keep `Inputs_2030.csv` beside the notebooks and run cells from top to bottom. This is a full-year **8,760-hour** optimisation, which may be computationally demanding.
-- Each notebook prints the installed PyPSA version for the run record. Record your Python version, installed dependency versions, solver/version and solver settings alongside reproduced results. The original paper results used CPLEX; installing the newest package releases does not guarantee identical outputs.
-
-## Solver selection
-
-Each notebook starts with the setting:
-
-```python
-SOLVER = "highs"  # default: free and open source
+```sh
+cd stage2_pypsa
+python -m venv .venv
 ```
 
-For the original IBM CPLEX route, change the setting to `SOLVER = "cplex"`. **CPLEX is not installed by this package.** Users must separately install IBM CPLEX and its compatible Python interface, and ensure they have a valid licence. Solver availability is checked immediately before optimisation; missing solver installations trigger a clear error.
+Activate the environment:
 
-The paper's original optimisation results were produced with CPLEX. HiGHS solves the same formulated model but may yield small differences owing to numerical tolerances, alternative optimal solutions, or solver settings. The original CPLEX outputs are released **separately** in [`initial_results/GB_tidal_CPLEX_reference_results.zip`](../initial_results/GB_tidal_CPLEX_reference_results.zip); these notebooks do **not** overwrite them.
+```powershell
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+```
+
+```sh
+# macOS / Linux
+source .venv/bin/activate
+```
+
+Then install and open Jupyter:
+
+```sh
+python -m pip install -r requirements.txt
+jupyter lab
+```
+
+Open a notebook, select this environment's kernel, and run cells from top to bottom. Keep the working directory in `stage2_pypsa/`, beside `Inputs_2030.csv`. If you already have a working compatible environment, skip installation. The optional installation cell remains commented out.
+
+Each notebook sets `SOLVER = "highs"`. To use the paper's solver, set `SOLVER = "cplex"` and install a compatible licensed IBM CPLEX Python interface separately. Full-year runs can take substantial time and memory. Record the installed versions and solver settings with your results.
+
+## Capacity substitutions
+
+These are the **actual notebook changes relative to Scenario 0**, in MW. They retain the supplied model configuration; Table 4 of the manuscript has different wind-type labels in zones 1 and 12.
+
+| Notebook | Added tidal | Removed wind / PV | Total tidal capacity |
+| --- | --- | --- | ---: |
+| [scenario_0.ipynb](scenario_0.ipynb) | None | None | 597 |
+| [scenario_1_z1.ipynb](scenario_1_z1.ipynb) | 500 in z1 | 100 offshore wind + 302 onshore wind in z1 | 1,097 |
+| [scenario_2_z9.ipynb](scenario_2_z9.ipynb) | 500 in z9 | 527 PV + 258 offshore wind in z9 | 1,097 |
+| [scenario_3_z15.ipynb](scenario_3_z15.ipynb) | 500 in z15 | 1,310 PV in z15 + 81 onshore wind in z12 | 1,097 |
+| [scenario_4_all.ipynb](scenario_4_all.ipynb) | 500 each in z1, z9, z15 | All three substitutions above | 2,097 |
+
+The baseline tidal portfolio is **287 MW in z1, 100 MW in z9 and 210 MW in z10**. These are baseline capacities assumed for 2030, not a statement about currently operating plants. The original `z12_15` output label refers to tidal deployment in z15 and wind substitution in z12.
+
+## Model assumptions
+
+| Element | Implementation in the notebooks |
+| --- | --- |
+| Network | 17 GB buses and 16 bidirectional, capacity-constrained `Link` corridors; no transmission losses |
+| Demand | Shared national hourly profile multiplied by fixed zonal shares |
+| Wind, PV and tidal | Fixed capacities, supplied availability profiles, zero marginal cost |
+| Conventional generation | Fixed capacities and constant marginal costs; nuclear minimum output 50% |
+| Interconnectors | Aggregated import-only `Generator` components at £250/MWh, not foreign buses or bidirectional interconnector links |
+| Battery storage | Two hours; 90% efficiency each way; initially empty |
+| Pumped hydro | Plant-specific 4–20 hour durations; 80% charging and 93% discharging efficiency; initially 50% full |
+| Storage boundary | No cyclic end-of-year state-of-charge constraint; no charging/discharging marginal cost |
+| Load shedding | Backup generator in each zone at £3,000/MWh |
+| Decisions | Continuous dispatch and storage scheduling with fixed asset capacities; no capacity expansion or unit commitment |
+
+The link network is a zonal transport representation. It does not implement AC power flow or line impedances. See [the system map and topology](../docs/figures/README.md) and [paper/code consistency notes](../docs/reproducibility.md).
 
 ## Outputs
 
-New runs write seven CSV files per scenario to `stage2_pypsa/outputs/<scenario>/`:
+New runs write to `outputs/<scenario>/`, ignored by Git:
 
-- `pypsa_results_gen.csv` — generator dispatch
-- `pypsa_results_stor.csv` — storage dispatch
-- `pypsa_results_marginal_price.csv` — bus marginal prices
-- `pypsa_results_network.csv` — link flows (`p0`)
-- `pypsa_inputs_gen.csv` — generator component inputs
-- `pypsa_inputs_stor.csv` — storage component inputs
-- `curtailment_results.csv` — curtailment summary using the original method
+| File | Contents and units |
+| --- | --- |
+| `pypsa_results_gen.csv` | Generator dispatch, MW; includes imports and load shedding |
+| `pypsa_results_stor.csv` | Net storage power, MW; positive discharge, negative charging |
+| `pypsa_results_marginal_price.csv` | Zonal marginal prices, £/MWh |
+| `pypsa_results_network.csv` | Link `p0`, MW; positive from `bus0` to `bus1` |
+| `pypsa_inputs_gen.csv` | Generator parameters for the run |
+| `pypsa_inputs_stor.csv` | Storage parameters for the run |
+| `curtailment_results.csv` | PyPSA curtailment summary, MWh for one-hour snapshots |
 
-The outputs directory is intentionally excluded from Git. The reference CPLEX results are supplied as a ZIP archive in the repository's separate [`initial_results/`](../initial_results/) folder.
+Snapshots are integer labels **0–8759**, not timestamped observations from calendar year 2030. Preserve the supplied row order.
 
-## Limited fix to baseline scenario
+The original CPLEX results are in a [separate ZIP](../initial_results/). For comparisons without a solver, use [summarise_results.py](summarise_results.py) and its [instructions](../initial_results/README.md#summarise-without-a-solver).
 
-Eight **zero-capacity** generator definitions in the original Scenario 0 notebook referred to profile columns absent from `Inputs_2030.csv`. Those eight definitions are now **commented out and preserved next to their original positions**, preventing `KeyError` while leaving installed capacity and effective generation unchanged. All other component definitions are preserved.
+## Validation
 
-## Validation status
-
-The notebooks have been structurally checked (valid JSON, Python code compilation, field references and file-path isolation). **No full 8,760-hour PyPSA/HiGHS/CPLEX optimisation has been executed in this preparation environment.** Before scientific release, run representative model construction and at least one full optimisation in a suitable Python environment; record solver and package versions with the reference outputs.
+All five models were constructed with PyPSA 1.0.4. A **48-hour baseline** solved optimally with HiGHS and the curtailment export succeeded. A full-year rerun has not been performed in this audit. Eight inactive baseline generator definitions with missing input columns remain commented out; they have zero installed capacity. [Versions and remaining reproduction gaps](../docs/reproducibility.md#validation-and-software).

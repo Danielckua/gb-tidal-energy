@@ -1,9 +1,9 @@
-# Optional dependencies for a NEW environment (Python 3.12 recommended).
-# Unpinned intentionally: installing a current PyPSA also installs HiGHS.
-# For exact reproduction of original results, record and lock tested versions.
-pypsa
-pandas
-numpy
+# Model packages used for the 2026-10-12 construction and 48-hour HiGHS check.
+# Python 3.11+; Python 3.12.14 was tested. This is not the original CPLEX lockfile.
+pypsa==1.0.4
+linopy==0.10.0
+highspy==1.15.1
+pandas==3.0.6
+numpy==2.5.4
 jupyterlab
-# Optional commercial solver (install separately with an appropriate IBM licence):
-# cplex
+# IBM CPLEX must be installed/licensed separately if selected.
