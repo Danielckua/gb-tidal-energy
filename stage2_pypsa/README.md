@@ -39,7 +39,7 @@ SOLVER = "highs"  # default: free and open source
 
 For the original IBM CPLEX route, change the setting to `SOLVER = "cplex"`. **CPLEX is not installed by this package.** Users must separately install IBM CPLEX and its compatible Python interface, and ensure they have a valid licence. Solver availability is checked immediately before optimisation; missing solver installations trigger a clear error.
 
-The paper's original optimisation results were produced with CPLEX. HiGHS solves the same formulated model but may yield small differences owing to numerical tolerances, alternative optimal solutions, or solver settings. The original CPLEX outputs will be released **separately** under `initial_results/`; these notebooks do **not** overwrite them.
+The paper's original optimisation results were produced with CPLEX. HiGHS solves the same formulated model but may yield small differences owing to numerical tolerances, alternative optimal solutions, or solver settings. The original CPLEX outputs are released **separately** in [`initial_results/GB_tidal_CPLEX_reference_results.zip`](../initial_results/GB_tidal_CPLEX_reference_results.zip); these notebooks do **not** overwrite them.
 
 ## Outputs
 
@@ -53,7 +53,7 @@ New runs write seven CSV files per scenario to `stage2_pypsa/outputs/<scenario>/
 - `pypsa_inputs_stor.csv` — storage component inputs
 - `curtailment_results.csv` — curtailment summary using the original method
 
-The outputs directory is intentionally excluded from Git. Reference CPLEX results, once provided, belong in the repository's separate `initial_results/` folder.
+The outputs directory is intentionally excluded from Git. The reference CPLEX results are supplied as a ZIP archive in the repository's separate [`initial_results/`](../initial_results/) folder.
 
 ## Limited fix to baseline scenario
 
