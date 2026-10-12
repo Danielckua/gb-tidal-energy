@@ -1,0 +1,9 @@
+# Optional dependencies for a NEW environment (Python 3.12 recommended).
+# Unpinned intentionally: installing a current PyPSA also installs HiGHS.
+# For exact reproduction of original results, record and lock tested versions.
+pypsa
+pandas
+numpy
+jupyterlab
+# Optional commercial solver (install separately with an appropriate IBM licence):
+# cplex

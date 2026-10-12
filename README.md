@@ -8,12 +8,12 @@ The study combines geospatial resource assessment and multi-objective site optim
 
 ## Repository contents
 
-The interactive map is included. The Stage 2 code, inputs and reference results listed below form the planned research package and will be added separately.
+The interactive map, five Stage 2 PyPSA notebooks and their shared hourly input dataset are published. The original CPLEX reference outputs will be added separately.
 
 | Folder             | Contents                                                                               |
 | ------------------ | -------------------------------------------------------------------------------------- |
 | `stage1_maps/`     | Interactive maps presenting the spatial assessment and tidal stream deployment results |
-| `stage2_pypsa/`    | Five power-system scenario scripts and supporting inputs                               |
+| `stage2_pypsa/`    | Five runnable Jupyter notebooks, `Inputs_2030.csv`, setup instructions and dependencies  |
 | `initial_results/` | Reference simulation outputs produced using CPLEX                                      |
 
 ## Interactive Research Map
@@ -50,19 +50,23 @@ Then open <http://localhost:8001/>. Use an available port if 8001 is occupied. S
 
 ## Stage 2: Power-system modelling
 
-Five scenarios are planned for the power-system research package:
+**[Open the Stage 2 PyPSA notebooks](stage2_pypsa/)**. The five 8,760-hour simulations are provided as separate Jupyter notebooks:
 
-* Scenario 0: baseline.
-* Three scenarios representing zonal tidal stream deployment in different zones.
-* A full tidal deployment scenario.
+* Scenario 0: baseline with no **additional** tidal deployment (597 MW of existing tidal capacity).
+* Scenario 1: additional 500 MW in zone 1.
+* Scenario 2: additional 500 MW in zone 9.
+* Scenario 3: additional 500 MW in zone 15.
+* Scenario 4: additional 500 MW in each of zones 1, 9 and 15.
+
+See the [Stage 2 README](stage2_pypsa/README.md) for setup, model assumptions, solver choice, run instructions and limitations.
 
 ## Reproduction and solvers
 
 The original simulations used IBM ILOG CPLEX. Reference outputs are planned for `initial_results/` and are not yet included in this repository.
 
-HiGHS is the intended open-source alternative for reproduction. CPLEX requires a suitable installation and licence.
+HiGHS is the default open-source solver in the published notebooks. CPLEX can be selected if its compatible Python interface and suitable licence are installed. The notebooks include an **optional**, commented pip installation cell for users who do not already have a working PyPSA environment.
 
-Python, PyPSA, solver versions and dependencies will be documented with the code when the research package is released. New simulation runs will write to a separate output folder to preserve the original reference results.
+New simulation results are written into separate `stage2_pypsa/outputs/<scenario>/` folders (ignored by Git) and will not overwrite future reference CPLEX outputs. The code has been structurally checked, but a full 8,760-hour run in a clean modern PyPSA environment has not been independently validated; exact original software and solver versions should be documented alongside the reference results.
 
 ## Associated paper
 
